@@ -1,11 +1,16 @@
 import React from "react"
 import { Outlet } from "react-router-dom"
-
+import "../App.css"
+import Header from "../components/Header"
 const AppLayout = () => {
   return (
     <div>
-      <h1>App Layout</h1>
+      <div className="grid-background"></div>
+      <main  className="min-h-screen container">
+        <Header/>
       <Outlet />
+    </main>
+    <div className="p-10 text-center bg-gray-800 mt-10">Learning new things is fun!</div>
     </div>
   )
 }
