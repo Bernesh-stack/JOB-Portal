@@ -4,7 +4,7 @@ import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import {
   SignedIn,
   SignedOut,
-  UserButton,
+  UserButton, 
   SignIn,
   useUser,
 } from "@clerk/clerk-react";
@@ -15,7 +15,7 @@ const Header = () => {
   const [showSignIn, setShowSignIn] = useState(false);
   const [search, setSearch] = useSearchParams();
   const navigate = useNavigate();
-
+ 
   // Clerk user info
   const { isLoaded, isSignedIn, user } = useUser();
 
@@ -67,15 +67,15 @@ const Header = () => {
         </Link>
 
         <div className="flex gap-8 items-center">
-          {/* Always show the "Post a Job" button and keep consistent styling */}
-          <Button
-            variant="destructive"
+          {/* Always show the "Post a Job" button and keep consistent styling
+          <Button */}
+            {/* variant="destructive"
             className="rounded-full"
             onClick={handlePostJobClick}
           >
             <PenBox size={20} className="mr-2" />
             Post a Job
-          </Button>
+          </Button> */}
 
           {/* Login button (signed out) or UserButton (signed in) */}
           <SignedOut>
@@ -85,6 +85,20 @@ const Header = () => {
           </SignedOut>
 
           <SignedIn>
+
+{user?.unsafeMetadata?.role === 'recruiter' &&(
+  <Link to="/post-job">
+              <Button variant='destructive' className='rounded-full'>
+                <PenBox size={20} className="mr-2"/>
+                Post a Job
+
+              </Button>
+              </Link>)}
+
+
+
+
+
             <UserButton
               appearance={{
                 elements: {

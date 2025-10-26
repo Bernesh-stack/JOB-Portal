@@ -12,7 +12,7 @@ const AppLayout = () => {
         {isLoaded ? <Header /> : null}
         <Outlet />
       </main>
-      <div className="p-10 text-center bg-gray-800 mt-10">Just learning</div>
+      <div className="p-10 text-center bg-gray-800 mt-10">Just learning new things</div>
     </div>
   );
 };
