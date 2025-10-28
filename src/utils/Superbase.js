@@ -1,19 +1,18 @@
-
+// utils/Superbase.js
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-const supabaseClient = async(supabaseAccessToken) =>{
-const supabase = createClient(supabaseUrl, supabaseKey,{
+// synchronous factory that accepts an optional token
+export default function supabaseClient(supabaseAccessToken) {
+  const client = createClient(supabaseUrl, supabaseKey, {
     global: {
-        headers:{
-            Authorization:`Bearer ${supabaseAccessToken}`,
-        }}
-    })
-    return supabase
-};
+      headers: supabaseAccessToken
+        ? { Authorization: `Bearer ${supabaseAccessToken}` }
+        : undefined,
+    },
+  });
 
-
-export default supabaseClient
-        
+  return client;
+}
