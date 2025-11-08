@@ -6,6 +6,7 @@ import useFetch from '../hooks/use-fetch';
 import { BarLoader } from 'react-spinners';
 import { useState } from 'react';
 import { useUser } from '@clerk/clerk-react';
+import JobCard from '../components/job-card'
 
 // need to showcase in the job listing
 const jobListing = () => {
@@ -41,10 +42,10 @@ return <div>
 )}
 
 {loadingJobs === false &&(
-  <div>
+  <div className='mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-4'>
     {Jobs?.length?(
       Jobs.map((job)=>{
-        return <span>{job.title}</span>
+        return <JobCard key={job.id} job={job}/>
       })
     ):(
       <div> No jobs Found </div>
