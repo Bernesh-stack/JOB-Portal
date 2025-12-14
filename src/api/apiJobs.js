@@ -8,7 +8,8 @@ export async function getJobs(token, { location, company_id, searchQuery } = {})
   const supabase = supabaseClient(token);
 
   // build query chain (do NOT await until the end)
-  let query = supabase.from('jobs').select('*,company:companies(name,logo_url),saved:saved_jobs(id)');
+  let query = 
+  supabase.from('jobs').select('*,company:companies(name,logo_url),saved:saved_jobs(id)');
 
   if (location && location !== '') {
     query = query.eq('location', location);
@@ -29,6 +30,57 @@ export async function getJobs(token, { location, company_id, searchQuery } = {})
 
   // await the built query and destructure correctly
   const { data, error } = await query;
+
+  if (error) {
+    console.error('Supabase error in getJobs:', error);
+    throw error;
+  }
+
+  return data || [];
+}
+
+
+export async function saveJobs(token,{alreadySaved} ,saveData) {
+  // console.log('getJobs called with:', { location, company_id, searchQuery, hasToken: !!token });
+
+  const supabase = supabaseClient(token);
+
+  if(alreadySaved){
+
+
+  const { data, error:deleteError } = await supabase
+  .from("saved_jobs")
+  .delete()
+  .eq("job_id",saveData.job_id)
+
+
+    if (deleteError) {
+    console.error('deleting error in getJobs:', error);
+    throw error;
+  }
+  return data
+
+  }else{
+  const { data, error:saveError } = await supabase
+  .from("saved_jobs")
+  .insert([saveData])
+  .select()
+  if (saveError) {
+    console.error('Supabase error in getJobs:', error);
+    throw error;
+  }return data;
+
+  }
+
+ 
+
+  const { data, error } = await supabase
+  .from("jobs")
+  .select("*,company:companies(name,logo_url),saved: saved_jobs(id)")
+
+  
+
+
 
   if (error) {
     console.error('Supabase error in getJobs:', error);
