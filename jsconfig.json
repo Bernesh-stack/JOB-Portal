@@ -6,7 +6,15 @@
     },
     {
       "path": "./tsconfig.node.json"
-    }
+    },
+    {
+  "compilerOptions": {
+    "baseUrl": ".",
+    "moduleResolution": "node"
+  },
+  "include": ["src"]
+}
+
   ],
   "compilerOptions": {
     "baseUrl": ".",

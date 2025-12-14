@@ -1,13 +1,13 @@
-// api/apijobs.js
+
 import supabaseClient from '@/utils/Superbase';
 
-// token = Clerk token (passed from useFetch), options is { location, company_id, searchQuery }
+
 export async function getJobs(token, { location, company_id, searchQuery } = {}) {
   console.log('getJobs called with:', { location, company_id, searchQuery, hasToken: !!token });
 
   const supabase = supabaseClient(token);
 
-  // build query chain (do NOT await until the end)
+
   let query = 
   supabase.from('jobs').select('*,company:companies(name,logo_url),saved:saved_jobs(id)');
 
@@ -68,4 +68,22 @@ export async function saveJobs(token, {alreadySaved, user_id, job_id}) {
     }
     return data;
   }
+}
+
+
+
+export async function getSingleJob({job_id},token) {
+  const supabase = supabaseClient(token);
+  const { data, error } = await supabase
+    .from("jobs")
+    .select("*,company:companies(name,logo_url),applications:applications(*)")
+    .eq('id' ,job_id)
+    .single()
+
+  if (error) {
+    console.error('error in fetching companies:', error);
+    throw error;
+  }
+  
+  return data || [];
 }
