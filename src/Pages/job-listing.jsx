@@ -1,10 +1,8 @@
-import React, { use } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSession } from '@clerk/clerk-react'
 import { getJobs } from '../api/apijobs';
-import { useEffect } from 'react';
 import useFetch from '../hooks/use-fetch';
 import { BarLoader } from 'react-spinners';
-import { useState } from 'react';
 import { useUser } from '@clerk/clerk-react';
 import JobCard from '../components/job-card'
 
@@ -45,7 +43,7 @@ return <div>
   <div className='mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-4'>
     {Jobs?.length?(
       Jobs.map((job)=>{
-        return <JobCard key={job.id} job={job} savedInit={job.saved?.length>0}/>
+        return <JobCard key={job.id} job={job} SavedInit={job.saved?.length>0}/>
         
       })
     ):(

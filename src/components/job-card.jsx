@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useUser } from '@clerk/clerk-react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './ui/card';
 import { MapPinIcon, Trash2Icon } from 'lucide-react';
@@ -6,7 +6,6 @@ import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
 import { Heart } from 'lucide-react';
 import { saveJobs } from '../api/apiJobs';
-import { useState } from 'react';
 import useFetch from '../hooks/use-fetch';
 
 const jobCard = ({job,isMyJob=false,SavedInit=false,onJobSaved=() =>{}}) => {
@@ -16,17 +15,16 @@ const{
   data:savedJobs,
   loading:loadingSavedJobs,
 
-} =useFetch(saveJobs,{
-    alreadySaved:saved,
-});
+} =useFetch(saveJobs);
 
-const {user} = usesavedUser();
+const {user} = useUser();
 useEffect(()=>{
     if(savedJobs !== undefined) setSaved(savedJobs?.length>0);
 },[savedJobs])
 
 const handleSaveJob = async() =>{
     await fnSavedJobs({
+        alreadySaved:saved,
         user_id:user.id,
         job_id:job.id
     });
@@ -50,7 +48,7 @@ const handleSaveJob = async() =>{
                     </div>
                 </div>
                 <hr/>
-                {job.description.substring(0,job.description.indexOf('.'))}
+                {job.description && job.description.indexOf('.') !== -1 ? job.description.substring(0,job.description.indexOf('.')) : job.description}
 
 
             </CardContent>

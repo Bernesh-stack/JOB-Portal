@@ -1,4 +1,4 @@
-import React, { use, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useUser } from '@clerk/clerk-react'
 import { BarLoader } from 'react-spinners';
 import { Button } from '../components/ui/button';
