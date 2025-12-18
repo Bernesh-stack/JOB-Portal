@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { getCompany } from "@/api/apiCompanies";
+import { getCompanies } from "@/api/apiCompanies";
 import { getJobs } from "@/api/apiJobs";
 
 const JobListing = () => {
@@ -30,13 +30,17 @@ const JobListing = () => {
     // loading: loadingCompanies,
     data: companies,
     fn: fnCompanies,
-  } = useFetch(getCompany);
+  } = useFetch(getCompanies);
 
   const {
     loading: loadingJobs,
     data: jobs,
     fn: fnJobs,
-  } = useFetch(getJobs);
+  } = useFetch(getJobs, {
+    location,
+    company_id,
+    searchQuery,
+  });
 
   useEffect(() => {
     if (isLoaded) {
@@ -46,13 +50,7 @@ const JobListing = () => {
   }, [isLoaded]);
 
   useEffect(() => {
-    if (isLoaded) {
-      fnJobs({
-        location,
-        company_id,
-        searchQuery,
-      });
-    }
+    if (isLoaded) fnJobs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, location, company_id, searchQuery]);
 
@@ -152,12 +150,12 @@ const JobListing = () => {
                 <JobCard
                   key={job.id}
                   job={job}
-                  SavedInit={job?.saved?.length > 0}
+                  savedInit={job?.saved?.length > 0}
                 />
               );
             })
           ) : (
-            <div>No Jobs Found </div>
+            <div>No Jobs Found 😢</div>
           )}
         </div>
       )}
