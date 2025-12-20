@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ApplyJobDrawer } from "@/components/apply-job";
-import ApplicationCard from "@/components/application-card";
+import ApplicationCard from "@/components/applicationCard";
 
 import useFetch from "@/hooks/use-fetch";
 import { getSingleJob, updateHiringStatus } from "@/api/apiJobs";
@@ -26,45 +26,73 @@ const JobPage = () => {
     loading: loadingJob,
     data: job,
     fn: fnJob,
-  } = useFetch(getSingleJob, {
-    job_id: id,
-  });
+  } = useFetch(getSingleJob);
 
   useEffect(() => {
-    if (isLoaded) fnJob();
-  }, [isLoaded]);
+    if (isLoaded && id) {
+      fnJob({ job_id: id });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoaded, id]);
+
+  // Debug: Log job data when it changes
+  useEffect(() => {
+    if (job) {
+      console.log("Job data loaded:", job);
+    }
+  }, [job]);
 
   const { loading: loadingHiringStatus, fn: fnHiringStatus } = useFetch(
-    updateHiringStatus,
-    {
-      job_id: id,
-    }
+    updateHiringStatus
   );
 
   const handleStatusChange = (value) => {
     const isOpen = value === "open";
-    fnHiringStatus(isOpen).then(() => fnJob());
+    fnHiringStatus({ job_id: id }, isOpen).then(() => {
+      if (id) {
+        fnJob({ job_id: id });
+      }
+    });
   };
 
   if (!isLoaded || loadingJob) {
     return <BarLoader className="mb-4" width={"100%"} color="#36d7b7" />;
   }
 
+  if (!job) {
+    return (
+      <div className="flex flex-col items-center justify-center mt-20">
+        <h1 className="text-2xl font-bold">Job not found</h1>
+        <p className="text-gray-500 mt-2">The job you're looking for doesn't exist or has been removed.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-8 mt-5">
       <div className="flex flex-col-reverse gap-6 md:flex-row justify-between items-center">
         <h1 className="gradient-title font-extrabold pb-3 text-4xl sm:text-6xl">
-          {job?.title}
+          {job?.title || 'Job Title'}
         </h1>
-        <img src={job?.company?.logo_url} className="h-12" alt={job?.title} />
+        {job?.company?.logo_url && (
+          <img 
+            src={job.company.logo_url} 
+            className="h-12" 
+            alt={job?.company?.name || job?.title}
+            onError={(e) => {
+              console.error("Failed to load company logo:", job.company.logo_url);
+              e.target.style.display = 'none';
+            }}
+          />
+        )}
       </div>
 
       <div className="flex justify-between ">
         <div className="flex gap-2">
-          <MapPinIcon /> {job?.location}
+          <MapPinIcon /> {job?.location || 'Location not specified'}
         </div>
         <div className="flex gap-2">
-          <Briefcase /> {job?.applications?.length} Applicants
+          <Briefcase /> {job?.applications?.length || 0} Applicants
         </div>
         <div className="flex gap-2">
           {job?.isOpen ? (
@@ -98,21 +126,25 @@ const JobPage = () => {
       )}
 
       <h2 className="text-2xl sm:text-3xl font-bold">About the job</h2>
-      <p className="sm:text-lg">{job?.description}</p>
+      <p className="sm:text-lg">{job?.description || 'No description available'}</p>
 
       <h2 className="text-2xl sm:text-3xl font-bold">
         What we are looking for
       </h2>
-      <MDEditor.Markdown
-        source={job?.requirements}
-        className="bg-transparent sm:text-lg" // add global ul styles - tutorial
-      />
+      {job?.requirements ? (
+        <MDEditor.Markdown
+          source={job.requirements}
+          className="bg-transparent sm:text-lg"
+        />
+      ) : (
+        <p className="sm:text-lg text-gray-500">No requirements specified</p>
+      )}
       {job?.recruiter_id !== user?.id && (
         <ApplyJobDrawer
           job={job}
           user={user}
           fetchJob={fnJob}
-          applied={job?.applications?.find((ap) => ap.candidate_id === user.id)}
+          applied={job?.applications?.find((ap) => ap.candidate_id === user?.id)}
         />
       )}
       {loadingHiringStatus && <BarLoader width={"100%"} color="#36d7b7" />}

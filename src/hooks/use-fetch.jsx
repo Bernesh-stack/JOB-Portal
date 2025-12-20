@@ -14,8 +14,17 @@ const useFetch = (cb) => {
     setError(null);
 
     try {
+      // Ensure session exists before getting token
+      if (!session) {
+        throw new Error("No active session");
+      }
+
       // get Clerk token for Supabase (ensure template exists or remove template)
       const supabaseAccessToken = await session.getToken({ template: 'supabase' });
+
+      if (!supabaseAccessToken) {
+        throw new Error("Failed to get access token");
+      }
 
       const response = await cb(supabaseAccessToken, options, ...args);
       setData(response);
