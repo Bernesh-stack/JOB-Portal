@@ -14,10 +14,9 @@ import { BriefcaseBusiness, Heart, PenBox } from "lucide-react";
 const Header = () => {
   const [showSignIn, setShowSignIn] = useState(false);
   const [search, setSearch] = useSearchParams();
-  const navigate = useNavigate();
  
   // Clerk user info
-  const { isLoaded, isSignedIn, user } = useUser();
+  const { user } = useUser();
 
   useEffect(() => {
     if (search.get("sign-in")) {
@@ -30,33 +29,6 @@ const Header = () => {
       setShowSignIn(false);
       setSearch({});
     }
-  };
-
-  // Helper to decide role: check publicMetadata first, fallback to unsafeMetadata
-  const getRole = () => {
-    if (!user) return undefined;
-    return user.publicMetadata?.role ?? user.unsafeMetadata?.role;
-  };
-
-  const handlePostJobClick = () => {
-    // If Clerk is still loading, wait (or return)
-    if (!isLoaded) return;
-
-    // If not signed in, trigger sign-in overlay
-    if (!isSignedIn) {
-      setShowSignIn(true);
-      return;
-    }
-
-    // signed in
-    const role = getRole();
-    if (role === "recruiter") {
-      navigate("/post-job");
-      return;
-    }
-
-    // signed in but not recruiter -> go to onboarding (or show a message)
-    navigate("/onboarding");
   };
 
   return (

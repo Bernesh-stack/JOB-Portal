@@ -8,7 +8,7 @@ import { Heart } from 'lucide-react';
 import { saveJob, deleteJob } from '../api/apiJobs';
 import useFetch from '../hooks/use-fetch';
 
-const jobCard = ({job,isMyJob=false,SavedInit=false,onJobSaved=() =>{},onJobAction=() =>{}}) => {
+const JobCard = ({job,isMyJob=false,SavedInit=false,onJobSaved=() =>{},onJobAction=() =>{}}) => {
 const [saved,setSaved] = useState(SavedInit)
 const{
   fn:fnSavedJobs,
@@ -110,4 +110,4 @@ const handleDeleteJob = async() => {
   )
 }
 
-export default jobCard
+export default JobCard

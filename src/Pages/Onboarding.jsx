@@ -5,7 +5,7 @@ import { Button } from '../components/ui/button';
 import { useNavigate } from 'react-router-dom';
 const Onboarding = () => {
       const navigate = useNavigate();
-      const { isLoaded, isSignedIn, user } = useUser();
+      const { isLoaded, user } = useUser();
 
       const handleRoleSelection =async(role)  => {
         await user.update({

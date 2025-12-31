@@ -1,7 +1,7 @@
 import supabaseClient, { supabaseUrl } from "@/utils/Superbase";
 
 
-export async function applyToJob(token, _ = {}, jobData) {
+export async function applyToJob(token, _options, jobData) {
   const supabase = supabaseClient(token);
 
   const random = Math.floor(Math.random() * 90000);

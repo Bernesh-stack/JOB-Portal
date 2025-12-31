@@ -1,5 +1,5 @@
 // in AppLayout.jsx
-import Header from "@/components/header";
+import Header from "@/components/Header";
 import { Outlet } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
 

@@ -150,7 +150,7 @@ export async function deleteJob(token, { job_id } = {}) {
 }
 
 
-export async function addNewJob(token, _ = {}, jobData) {
+export async function addNewJob(token, _options, jobData) {
   const supabase = supabaseClient(token);
 
   const { data, error } = await supabase

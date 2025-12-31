@@ -3,13 +3,13 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import AppLayout from "./layouts/app-layout";
 import { ThemeProvider } from "./components/theme-provider";
 
-import LandingPage from "./pages/LandingPage";
-import Onboarding from "./pages/onboarding";
-import PostJob from "./pages/post-job";
-import JobListing from "./pages/job-listing";
-import MyJobs from "./pages/my-jobs";
+import LandingPage from "./Pages/LandingPage";
+import Onboarding from "./Pages/Onboarding";
+import PostJob from "./Pages/post-job";
+import JobListing from "./Pages/job-listing";
+import MyJobs from "./Pages/my-jobs";
 import SaveJobs from "./Pages/saved-job";
-import JobPage from "./pages/job";
+import JobPage from "./Pages/job";
 import ProtectedRoute from "./components/protected-routes";
 import "./App.css";
 
